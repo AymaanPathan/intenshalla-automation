@@ -15,7 +15,6 @@ puppeteer.use(StealthPlugin());
     });
 
     const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 1980 });
 
     // Set user agent to make the browser appear more human-like
     await page.setUserAgent(
@@ -73,40 +72,30 @@ puppeteer.use(StealthPlugin());
 
     // Get all internship elements
     const internshipElements = await page.$$(
-      ".container-fluid.individual_internship.view_detail_button.visibilityTrackerItem"
+      ".container-fluid.individual_internship.easy_apply.button_easy_apply_t.visibilityTrackerItem"
     );
 
-    for (const element of internshipElements) {
+    for (let i = 2; i < internshipElements.length; i++) {
+      const element = internshipElements[i];
+
+      // Get internship name
       const nameElement = await element.$("h3.job-internship-name");
       const internshipName = await page.evaluate(
         (name) => name.textContent.trim(),
         nameElement
       );
-      console.log("Opening internship:", internshipName);
-
-      const newPagePromise = new Promise((resolve) =>
-        browser.once("targetcreated", async (target) => {
-          const newPage = await target.page();
-          resolve(newPage);
-        })
-      );
+      console.log(`Applying for: ${internshipName}`);
 
       await element.click();
-      const newPage = await newPagePromise;
+      await delay(2000);
 
-      const pages = await browser.pages();
-
-      if (pages.length >= 2) {
-        for (let j = 0; j <= pages.length; j++) {
-          await pages[j].close();
-        }
-        const applyBtn = await page.waitForSelector("#apply_now_button");
-        if (applyBtn) {
-          console.log("yes");
-        } else {
-          console.log("NO");
-        }
-      }
+      await page.waitForSelector("#continue_button");
+      await delay(1000);
+      await page.click("#continue_button");
+      delay(1000);
+      await page.waitForSelector("#cover_letter");
+      await page.click("#cover_letter");
+      await page.type("cover_letter", "hi");
     }
   } catch (error) {
     console.error("Error:", error);
