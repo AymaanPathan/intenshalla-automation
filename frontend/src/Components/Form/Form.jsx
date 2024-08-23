@@ -4,7 +4,7 @@ const Form = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fieldname, setFieldName] = useState("");
-  const [location, setLocation] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +15,7 @@ const Form = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, fieldname, location }), // Include location in the request body
+        body: JSON.stringify({ email, password, fieldname, coverLetter }), // Include location in the request body
       });
 
       if (response.ok) {
@@ -42,86 +42,90 @@ const Form = () => {
         onSubmit={handleSubmit}
         className="mx-auto mb-0 mt-8 max-w-md space-y-8"
       >
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email Address
-          </label>
-          <div className="relative mt-1">
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              type="email"
-              id="email"
-              name="email"
-              className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-              placeholder="Enter your email"
-            />
+        <div className="flex justify-between items-center gap-12">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-xs font-medium text-gray-400"
+            >
+              Email Address
+            </label>
+            <div className="relative mt-1">
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                type="email"
+                id="email"
+                name="email"
+                className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                placeholder="Enter your email"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-xs font-medium text-gray-400"
+            >
+              Password
+            </label>
+            <div className="relative mt-1">
+              <input
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                type="password"
+                id="password"
+                name="password"
+                className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                placeholder="Enter your password"
+              />
+            </div>
           </div>
         </div>
+        <div className="flex justify-between">
+          <div>
+            <label
+              htmlFor="cover"
+              className="block text-xs font-medium text-gray-400"
+            >
+              Cover Letter
+            </label>
+            <div className="relative  mt-1">
+              <textarea
+                onChange={(e) => setCoverLetter(e.target.value)}
+                value={coverLetter}
+                type="text"
+                id="cover"
+                // rows={2}
+                // cols={8}
+                name="cover"
+                className="w-full resize-none border-2  rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                placeholder="Enter your Cover Letter"
+              />
+            </div>
+          </div>
 
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
-          <div className="relative mt-1">
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              type="password"
-              id="password"
-              name="password"
-              className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-              placeholder="Enter your password"
-            />
+          <div>
+            <label
+              htmlFor="FieldName"
+              className="block text-xs font-medium text-gray-400"
+            >
+              Field Name
+            </label>
+            <div className="relative mt-1">
+              <input
+                onChange={(e) => setFieldName(e.target.value)}
+                value={fieldname}
+                type="text"
+                id="FieldName"
+                name="FieldName"
+                className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                placeholder="Enter your Field"
+              />
+            </div>
           </div>
         </div>
-
-        <div>
-          <label
-            htmlFor="FieldName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Field Name
-          </label>
-          <div className="relative mt-1">
-            <input
-              onChange={(e) => setFieldName(e.target.value)}
-              value={fieldname}
-              type="text"
-              id="FieldName"
-              name="FieldName"
-              className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-              placeholder="Enter your Field"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label
-            htmlFor="location"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Location
-          </label>
-          <div className="relative mt-1">
-            <input
-              onChange={(e) => setLocation(e.target.value)}
-              value={location}
-              type="text"
-              id="location"
-              name="location"
-              className="w-full border-2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-              placeholder="Enter your location"
-            />
-          </div>
-        </div>
-
         <div className="text-center">
           <button
             type="btn"
