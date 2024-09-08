@@ -2,7 +2,8 @@ const express = require("express");
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 const cors = require("cors");
-const { Keyboard } = require("puppeteer");
+
+puppeteer.use(StealthPlugin());
 
 const app = express();
 app.use(cors({ origin: "*" }));
@@ -17,6 +18,7 @@ router.post("/auto", async (req, res) => {
   const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
   let browser;
+  let page;
 
   try {
     browser = await puppeteer.launch({
@@ -24,7 +26,7 @@ router.post("/auto", async (req, res) => {
       args: ["--start-maximized"],
     });
 
-    const page = await browser.newPage();
+    page = await browser.newPage();
     const [width, height] = await page.evaluate(() => [
       window.screen.availWidth,
       window.screen.availHeight,
@@ -61,30 +63,32 @@ router.post("/auto", async (req, res) => {
     await page.waitForSelector(".internship_item_location");
     await page.click(".internship_item_location");
 
-    async function applyForInternships() {
-      await page.waitForSelector("#select_category_chosen");
-      await page.click("#select_category_chosen");
-      await page.waitForSelector("#select_category_chosen > ul > li > input");
-      await delay(3000);
-      await page.type(
-        "#select_category_chosen > ul > li > input",
-        ` ${fieldName} `,
-        {
-          delay: 50,
-        }
-      );
+    await page.waitForSelector("#select_category_chosen");
+    await page.click("#select_category_chosen");
+    await page.waitForSelector("#select_category_chosen > ul > li > input");
+    await delay(3000);
+    await page.type(
+      "#select_category_chosen > ul > li > input",
+      ` ${fieldName} `,
+      {
+        delay: 50,
+      }
+    );
 
-      await delay(3000);
-      await page.keyboard.press("Enter");
-      await delay(3000);
+    await delay(3000);
+    await page.keyboard.press("Enter");
+    await delay(3000);
 
-      await page.waitForSelector("#internship_list_container_1");
+    let internshipElements = await page.$$(
+      ".container-fluid.individual_internship.easy_apply.button_easy_apply_t.visibilityTrackerItem"
+    );
 
-      const internshipElements = await page.$$(
-        ".container-fluid.individual_internship.easy_apply.button_easy_apply_t.visibilityTrackerItem"
-      );
-
-      for (let i = 0; i < internshipElements.length; i++) {
+    for (let i = 0; i < internshipElements.length; i++) {
+      try {
+        // Re-select internships after reload
+        internshipElements = await page.$$(
+          ".container-fluid.individual_internship.easy_apply.button_easy_apply_t.visibilityTrackerItem"
+        );
         const element = internshipElements[i];
 
         const nameElement = await element.$("h3.job-internship-name");
@@ -94,34 +98,33 @@ router.post("/auto", async (req, res) => {
         );
         console.log(`Applying for: ${internshipName}`);
 
+        // Click on the internship element to open the application modal
         await element.click();
         await delay(2000);
 
-        await page.waitForSelector("#continue_button");
-        await delay(1000);
-        await page.click("#continue_button");
-
+        // Now check if there are any textareas after clicking
         const textareas = await page.$$('textarea[name^="text_"]');
         if (textareas.length > 0) {
           console.log(`Textarea found, skipping internship: ${internshipName}`);
 
-          // Wait for and click the close button (if present)
-          await page.waitForSelector("#easy_apply_modal_close", {
-            visible: true,
-          });
-
-          await page.click("#easy_apply_modal_close");
-
-          await delay(3000);
-          await page.waitForSelector("#easy_apply_modal_close_confirm_exit", {
-            visible: true,
-          });
-
-          // Click the "Exit" button to close the modal
-          await page.click("#easy_apply_modal_close_confirm_exit");
-
-          continue;
+          const closeIcon = await page.$("#easy_apply_modal_close");
+          if (closeIcon) {
+            await closeIcon.click();
+            const confirmExitButton = await page.$(
+              "#easy_apply_modal_close_confirm_exit"
+            );
+            if (confirmExitButton) {
+              await confirmExitButton.click();
+            } else {
+              console.error("Confirm exit button not found.");
+            }
+            await delay(4000);
+            continue;
+          }
         }
+
+        await page.waitForSelector("#continue_button");
+        await page.click("#continue_button");
 
         await delay(4000);
         await page.waitForSelector(
@@ -132,9 +135,8 @@ router.post("/auto", async (req, res) => {
           coverLetter
         );
 
-        delay(10000);
-
         await delay(3000);
+
         await page.waitForSelector(
           ".submit_button_container.easy_apply_footer #submit"
         );
@@ -146,20 +148,20 @@ router.post("/auto", async (req, res) => {
         if (modalExists) {
           console.log("Modal appeared, closing it...");
           await page.click("#backToInternshipsCta");
+          await page.waitForNavigation({ waitUntil: "networkidle2" });
         } else {
           console.log("Modal did not appear, clicking #not-interested...");
           await page.waitForSelector("#not-interested");
           await page.click("#not-interested");
         }
 
-        await delay(2000);
+        await page.waitForNavigation({ waitUntil: "networkidle2" });
+      } catch (err) {
+        console.error(`Error applying for internship: ${err.message}`);
       }
     }
-
-    await applyForInternships();
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Automation failed.");
   }
 });
 
