@@ -1,0 +1,26 @@
+/* FaqCard.css */
+.faq-content-enter {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.faq-content-enter-active {
+  max-height: 500px; /* Adjust as needed */
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 300ms ease-in-out, opacity 0ms ease-in-out;
+}
+
+.faq-content-exit {
+  max-height: 500px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.faq-content-exit-active {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 300ms ease-in-out, opacity 0ms ease-in-out;
+}

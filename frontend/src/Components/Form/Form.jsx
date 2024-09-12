@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import toast from "react-hot-toast";
 const Form = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +47,11 @@ const Form = () => {
   ];
 
   const handleSubmit = async (e) => {
+    if (!email || !password || !coverLetter) {
+      return toast.error("Please Provide All Info");
+    } else {
+      toast.success("Check New Browser");
+    }
     e.preventDefault();
 
     try {
@@ -63,6 +68,7 @@ const Form = () => {
       }
     } catch (error) {
       console.error("Error submitting application", error);
+      toast.error("Please Try Again Later");
     }
   };
   console.log(fieldName);
@@ -169,7 +175,8 @@ const Form = () => {
         </div>
         <div className="text-center">
           <button
-            type="submit"
+            onClick={handleSubmit}
+            type="button"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium w-full py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             Submit

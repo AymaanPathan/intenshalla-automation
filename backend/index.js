@@ -20,7 +20,7 @@ router.post("/auto", async (req, res) => {
   let browser;
   let page;
   let applicationsMade = 0;
-  const MAX_APPLICATIONS = 1;
+  const MAX_APPLICATIONS = 5;
 
   try {
     browser = await puppeteer.launch({
@@ -43,17 +43,21 @@ router.post("/auto", async (req, res) => {
       waitUntil: "networkidle2",
     });
 
-    await page.waitForSelector(".login-cta");
-    await page.click(".login-cta");
+    await page.waitForSelector(".nav-cta-container .login-cta", {
+      visible: true,
+    });
+    await page.click(".nav-cta-container .login-cta");
 
-    await page.waitForSelector("#modal_email");
-    await page.type("#modal_email", email);
+    await page.waitForSelector("#modal_email", { visible: true });
+    await page.type("#modal_email", email, { delay: 100 });
 
-    await page.waitForSelector("#modal_password");
-    await page.type("#modal_password", password);
+    await page.waitForSelector("#modal_password", { visible: true });
+    await page.type("#modal_password", password, { delay: 100 });
+    await delay(4000);
 
+    await page.waitForSelector("#modal_login_submit", { visible: true });
     await Promise.all([
-      page.waitForNavigation({ waitUntil: "networkidle2" }),
+      page.waitForNavigation(),
       page.click("#modal_login_submit"),
     ]);
 
