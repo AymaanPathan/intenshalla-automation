@@ -57,15 +57,7 @@ Run the automation:
 Once the server and client are running, navigate to the appropriate section of the app where the automation starts.
 
 Usage
-This project automatically applies for internships on Internshala based on the user's field of interest. The user can select the relevant field and specify any additional filters, after which Puppeteer will handle the automation of the application process.
-
-For a more detailed walkthrough of the app's features, please check the User Guide.
-
-Features
-Automated Internship Applications: Automatically applies for internships based on user preferences.
-Custom Filters: Users can filter internships based on location, stipend, and other preferences.
-Puppeteer Integration: Puppeteer handles web scraping and automation tasks in the background.
-
+This project automatically applies for internships on Internshala based on the user's field of interest. The user can select the relevant field and after which Puppeteer will handle the automation of the application process.
 
 Owner
 This project was developed by Aymaan Pathan.
