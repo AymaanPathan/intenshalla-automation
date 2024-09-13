@@ -8,7 +8,7 @@ Clone the repository:
 
 ```bash
 Copy code
-git clone https://github.com/<your-github-username>/internshala-automation.git
+git clone https://github.com/AymaanPathan/intenshalla-automation.git
 ```
 Navigate to the project directory:
 
