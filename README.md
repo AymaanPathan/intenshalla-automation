@@ -1,4 +1,8 @@
-Internshala Automation
+
+<img width="947" alt="home" src="https://github.com/user-attachments/assets/eda17f25-ea9b-43b2-bd72-b163447d0cb2">
+
+
+<h1>Internshala Automation</h1>
 This project automates the process of applying for internships on Internshala based on the user's field of interest. Built using React, Node.js, and Puppeteer, it works locally and is intended to streamline internship applications.
 
 Setup
