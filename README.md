@@ -12,37 +12,42 @@ git clone https://github.com/AymaanPathan/intenshalla-automation.git
 ```
 Navigate to the project directory:
 
-bash
+```bash
 Copy code
 cd internshala-automation
+```
 Install server-side dependencies:
 
-bash
+```bash
 Copy code
 cd backend
 npm install
+```
 Install client-side dependencies:
 
-bash
+```bash
 Copy code
 cd ../frontend
 npm install
+```
 
 
 Run the server:
 
 From the backend directory, run:
 
-bash
+```bash
 Copy code
 npm run start
+```
 Run the client:
 
 From the client directory, run:
 
-bash
+```bash
 Copy code
 npm run dev
+```
 Run the automation:
 
 Once the server and client are running, navigate to the appropriate section of the app where the automation starts.
