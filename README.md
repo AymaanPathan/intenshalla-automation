@@ -6,9 +6,10 @@ To clone and run this project locally, follow these steps:
 
 Clone the repository:
 
-bash
+```bash
 Copy code
 git clone https://github.com/<your-github-username>/internshala-automation.git
+```
 Navigate to the project directory:
 
 bash
